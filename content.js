@@ -145,7 +145,7 @@ async function init() {
   
   // Render bookmarks list
   const bookmarksList = createBookmarksList();
-  bookmarksList.style.display = 'none'; // Initially hidden
+  bookmarksList.style.display = 'none';
   sidebar.appendChild(bookmarksList);
   
   // Add toggle functionality
@@ -156,14 +156,36 @@ async function init() {
     collapseIcon.style.transform = bookmarksList.style.display === 'none' ? 'rotate(0deg)' : 'rotate(180deg)';
   });
 
-  const navbar = await waitForNavbar();
-  const bookmarkButton = createBookmarkButton();
-  navbar.appendChild(bookmarkButton);
-
   const bookmarkManager = new BookmarkManager();
 
-  document.querySelector(".add-bookmark-btn").addEventListener("click", () => {
-    bookmarkManager.addBookmark();
+  // Function to initialize the navbar button
+  async function initNavbarButton() {
+    const navbar = await waitForNavbar();
+    const existingButton = navbar.querySelector('.add-bookmark-btn');
+    if (!existingButton) {
+      const bookmarkButton = createBookmarkButton();
+      navbar.appendChild(bookmarkButton);
+      bookmarkButton.addEventListener("click", () => {
+        bookmarkManager.addBookmark();
+      });
+    }
+  }
+
+  // Initialize navbar button
+  await initNavbarButton();
+
+  // Watch for URL changes
+  const observer = new MutationObserver(() => {
+    if (window.location.href !== lastUrl) {
+      lastUrl = window.location.href;
+      initNavbarButton();
+    }
+  });
+
+  let lastUrl = window.location.href;
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
   });
 }
 
