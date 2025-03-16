@@ -1,15 +1,18 @@
 {
   "name": "chatgpt-bookmarks",
-  "module": "src/content.js",
+  "module": "src/content.ts",
   "scripts": {
-    "dev": "bun build ./src/content.js --outdir ./dist --watch",
-    "build": "bun build ./src/content.js --outdir ./dist"
+    "dev": "bun build ./src/content.ts --outdir ./dist --watch",
+    "build": "bun build ./src/content.ts --outdir ./dist",
+    "typecheck": "tsc --noEmit"
   },
   "type": "module",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/chrome": "^0.0.309",
+    "typescript": "^5.8.2"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.8.2"
   }
 }

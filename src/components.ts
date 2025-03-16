@@ -1,12 +1,21 @@
-import { createElement, createSVGIcon } from './utils.js';
+import { createElement, createSVGIcon } from "./utils.js";
+
+/**
+ * Interface for bookmark object
+ */
+export interface Bookmark {
+  title: string;
+  url: string;
+  timestamp: string;
+}
 
 /**
  * Creates the bookmarks section component
  * @returns {HTMLElement} The bookmarks section element
  */
-export function createBookmarksSection() {
-  return createElement('div', {
-    className: 'bookmarks-section',
+export function createBookmarksSection(): HTMLElement {
+  return createElement("div", {
+    className: "bookmarks-section",
     innerHTML: `
       <button data-testid="explore-gpts-button" class="flex w-full items-center gap-2.5 rounded-lg px-2 text-token-text-primary hover:bg-token-sidebar-surface-secondary h-9">
         <div class="flex h-6 w-6 items-center justify-center text-token-text-secondary">
@@ -19,7 +28,7 @@ export function createBookmarksSection() {
           <path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-    `
+    `,
   });
 }
 
@@ -27,9 +36,9 @@ export function createBookmarksSection() {
  * Creates the bookmark button component
  * @returns {HTMLElement} The bookmark button element
  */
-export function createBookmarkButton() {
-  return createElement('button', {
-    className: 'add-bookmark-btn',
+export function createBookmarkButton(): HTMLElement {
+  return createElement("button", {
+    className: "add-bookmark-btn",
     innerHTML: `
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M17 3H7C5.89543 3 5 3.89543 5 5V21L12 17.5L19 21V5C19 3.89543 18.1046 3 17 3Z" 
@@ -39,7 +48,7 @@ export function createBookmarkButton() {
           stroke-linejoin="round"/>
       </svg>
       Add
-    `
+    `,
   });
 }
 
@@ -47,19 +56,19 @@ export function createBookmarkButton() {
  * Creates the bookmarks list component
  * @returns {HTMLElement} The bookmarks list element
  */
-export function createBookmarksList() {
-  return createElement('div', {
-    className: 'bookmarks-list'
+export function createBookmarksList(): HTMLElement {
+  return createElement("div", {
+    className: "bookmarks-list",
   });
 }
 
 /**
  * Creates a bookmark item component
- * @param {Object} bookmark - The bookmark data
+ * @param {Bookmark} bookmark - The bookmark data
  * @param {number} index - The index of the bookmark
  * @returns {string} The bookmark item HTML
  */
-export function createBookmarkItem(bookmark, index) {
+export function createBookmarkItem(bookmark: Bookmark, index: number): string {
   return `
     <div class="bookmark-item">
       <a href="${bookmark.url}" class="bookmark-link">${bookmark.title}</a>
