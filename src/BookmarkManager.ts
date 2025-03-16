@@ -72,5 +72,16 @@ export class BookmarkManager {
         this.removeBookmark(index);
       });
     });
+
+    // Add event listener to bookmark links
+    document.querySelectorAll('.bookmark-link').forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const url = (e.target as HTMLAnchorElement).href;
+        history.pushState(null, "", url);
+
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      });
+    });
   }
 }
