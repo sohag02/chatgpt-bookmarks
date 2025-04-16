@@ -8,9 +8,16 @@
  */
 export function waitForElement(
   selector: string,
-  isXPath: boolean = false
+  isXPath: boolean = false,
+  timeout: number = 30000 // 30 seconds timeout
 ): Promise<Element> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    // Set a timeout to avoid waiting indefinitely
+    const timeoutId = setTimeout(() => {
+      clearInterval(checkInterval);
+      reject(new Error(`Element not found: ${selector}`));
+    }, timeout);
+
     const checkInterval = setInterval(() => {
       let element: Element | null;
 
@@ -28,6 +35,7 @@ export function waitForElement(
 
       if (element) {
         clearInterval(checkInterval);
+        clearTimeout(timeoutId);
         resolve(element);
       }
     }, 100);

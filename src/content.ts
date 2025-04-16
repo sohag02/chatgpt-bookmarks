@@ -3,6 +3,7 @@ import {
   createBookmarksSection,
   createBookmarkButton,
   createBookmarksList,
+  createNewFolderButton,
 } from "./components.ts";
 import { BookmarkManager } from "./BookmarkManager.ts";
 
@@ -14,7 +15,6 @@ async function init(): Promise<void> {
   const sidebarXPath =
     "/html/body/div[1]/div/div[1]/div[1]/div/div/div/nav/div[2]/div/div[2]";
   const sidebar = await waitForElement(sidebarXPath, true);
-  console.log("sidebar", sidebar);
 
   // Create and append bookmarks section
   const bookmarksSection = createBookmarksSection();
@@ -24,6 +24,22 @@ async function init(): Promise<void> {
   const bookmarksList = createBookmarksList();
   bookmarksList.style.display = "none";
   sidebar.appendChild(bookmarksList);
+
+  // Create and append new folder button
+  const newFolderButton = createNewFolderButton();
+  bookmarksList.appendChild(newFolderButton);
+
+  // Initialize bookmark manager
+  const bookmarkManager = new BookmarkManager();
+
+  // Add new folder button event listener
+  newFolderButton.addEventListener("click", () => {
+    const folderName = prompt("Enter folder name:");
+    if (folderName && folderName.trim()) {
+      bookmarkManager.createFolder(folderName.trim());
+      bookmarkManager.saveFolders();
+    }
+  });
 
   // Add toggle functionality
   const bookmarksButton = bookmarksSection.querySelector("button");
@@ -41,12 +57,9 @@ async function init(): Promise<void> {
     });
   }
 
-  // Initialize bookmark manager
-  const bookmarkManager = new BookmarkManager();
-
   // Initialize navbar button
   async function initNavbarButton(): Promise<void> {
-    const shareButton = await waitForElement("[aria-label='Share']");
+    const shareButton = await waitForElement("[aria-label='Open conversation options']");
     const navbar = shareButton?.parentElement;
 
     if (navbar && !navbar.querySelector(".add-bookmark-btn")) {
